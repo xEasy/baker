@@ -13,6 +13,12 @@ import (
 )
 
 func main() {
+	app.InitLog()
+	if os.Getenv("WEB_ENV") == "production" {
+		gin.SetMode(gin.ReleaseMode)
+	}
+	gin.DefaultWriter = os.Stdout
+
 	runtime.GOMAXPROCS(runtime.NumCPU() * 2)
 
 	router := gin.Default()
