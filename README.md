@@ -4,6 +4,8 @@ INSTALL:
 
 USAGE:
 
+HOST: `image_baker.upayapp.cn`
+
 #### 通用参数
 
 `mode`
