@@ -1,58 +1,18 @@
 package app
 
 import (
-	"crypto/md5"
-	"encoding/hex"
 	"fmt"
 	"io"
 	"os"
 
-	"github.com/bradfitz/gomemcache/memcache"
+	"gitlab.ulaiber.com/uboss/baker/services/cacher"
+	"gitlab.ulaiber.com/uboss/baker/services/upyunworker"
 )
-
-var memcacheClient *memcache.Client
-var BakerHost string
-
-func init() {
-	memcacheClient = memcache.New("localhost:11211")
-	memcacheClient.MaxIdleConns = 100
-	if os.Getenv("WEB_ENV") == "production" {
-		BakerHost = "http://image_baker.upayapp.cn/"
-	} else {
-		BakerHost = "http://localhost:8080/"
-	}
-}
-
-func GenMD5CacheKey(key string) string {
-	h := md5.New()
-	io.WriteString(h, key)
-	return hex.EncodeToString(h.Sum(nil))
-}
-
-func GetCache(key string) (value string, err error) {
-	item, err := memcacheClient.Get(key)
-	if err != nil {
-		return
-	}
-	value = string(item.Value)
-	return
-}
-
-func SetCache(key string, value string) error {
-	return memcacheClient.Set(&memcache.Item{
-		Key:   key,
-		Value: []byte(value),
-	})
-}
 
 func SaveAssetsCacheFile(cacheKey string, file *os.File) (url string, err error) {
 	go func() {
-		formResp, err := UploadToUpyun(file)
-		if err != nil {
-			fmt.Println("SaveAssetsCacheFile UPLOAD UPYUN FAIL", err.Error())
-		} else {
-			SetCache(cacheKey, formResp.Url)
-		}
+		work := upyunworker.Job{upyunworker.Payload{File: file, CacheKey: cacheKey}}
+		upyunworker.JobQueue <- work
 	}()
 
 	fileSrc, err := os.Open(file.Name())
@@ -74,7 +34,7 @@ func SaveAssetsCacheFile(cacheKey string, file *os.File) (url string, err error)
 	}
 	assetsFile.Sync()
 
-	url = BakerHost + "assets/" + fileName
+	url = cacher.BakerHost + "assets/" + fileName
 	fmt.Println(url)
 	return
 }
