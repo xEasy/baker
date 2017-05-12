@@ -49,14 +49,18 @@ func (w Worker) Start() {
 
 			select {
 			case job := <-w.JobChannel:
-				fmt.Println("[UPYUN] GET job:", job.Payload)
-				// we have received a work request.
-				// do something with it
-				formResp, err := UploadToUpyun(job.Payload.File)
-				if err != nil {
-					fmt.Println("[UPYUN] upyunworker UploadToUpyun FAIL:", err)
-				}
-				cacher.SetCache(job.Payload.CacheKey, formResp.Url)
+				func() {
+					defer Recovery()
+					fmt.Println("[UPYUN] GET job:", job.Payload)
+					// we have received a work request.
+					// do something with it
+					formResp, err := job.Payload.UploadToUpyun()
+					if err != nil {
+						fmt.Println("[UPYUN] upyunworker UploadToUpyun FAIL:", err)
+					} else {
+						cacher.SetCache(job.Payload.CacheKey, formResp.Url)
+					}
+				}()
 			case <-w.quit:
 				// we have received a signal to stop
 				return

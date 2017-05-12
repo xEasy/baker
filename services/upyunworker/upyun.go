@@ -23,10 +23,10 @@ func init() {
 	UpyunHost = "http://ssobu.b0.upaiyun.com/"
 }
 
-func UploadToUpyun(file *os.File) (formResp *upyun.FormUploadResp, err error) {
-	defer os.Remove(file.Name())
+func (playload *Payload) UploadToUpyun() (formResp *upyun.FormUploadResp, err error) {
+	defer os.Remove(playload.File.Name())
 	formResp, err = upClient.FormUpload(&upyun.FormUploadConfig{
-		LocalPath:      file.Name(),
+		LocalPath:      playload.File.Name(),
 		SaveKey:        "ubakers/{filemd5}.jpg",
 		ExpireAfterSec: 30,
 	})
