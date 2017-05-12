@@ -1,4 +1,4 @@
-package app
+package painter
 
 import (
 	"crypto/md5"
@@ -34,7 +34,7 @@ func GetImageObj(file *os.File) (img image.Image, err error) {
 	case "image/jpeg", "image/jpg":
 		img, err = jpeg.Decode(file)
 		if err != nil {
-			fmt.Println("jpeg error")
+			fmt.Println("[PAINTER] jpeg error", err.Error())
 			return nil, err
 		}
 	case "image/gif":
@@ -45,7 +45,7 @@ func GetImageObj(file *os.File) (img image.Image, err error) {
 	case "image/png":
 		img, err = png.Decode(file)
 		if err != nil {
-			fmt.Println("DECODE PNG FAIL", err)
+			fmt.Println("[PAINTER] DECODE PNG FAIL", err)
 			return nil, err
 		}
 	default:
@@ -58,14 +58,14 @@ func MergeImage(file1 *os.File, file2 *os.File) (imageFile *os.File, err error) 
 
 	src, err := GetImageObj(file1)
 	if err != nil {
-		fmt.Println("bgFail:", err)
+		fmt.Println("[PAINTER] bgFail:", err)
 		return
 	}
 	srcB := src.Bounds().Max
 
 	src1, err := GetImageObj(file2)
 	if err != nil {
-		fmt.Println("QRcodeFAIL", err)
+		fmt.Println("[PAINTER] QRcodeFAIL", err)
 		return
 	}
 	src1B := src.Bounds().Max
@@ -89,7 +89,7 @@ func MergeImage(file1 *os.File, file2 *os.File) (imageFile *os.File, err error) 
 	imageFile, err = ioutil.TempFile("", "upay")
 	err = jpeg.Encode(imageFile, newImage, &opt)
 	if err != nil {
-		fmt.Println(err)
+		fmt.Println("[PAINTER] JPEG Encode fail: ", err)
 		return
 	}
 	defer imageFile.Close()

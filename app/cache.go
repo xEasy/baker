@@ -29,12 +29,12 @@ func SaveAssetsCacheFile(cacheKey string, file *os.File) (url string, err error)
 
 	_, err = io.Copy(assetsFile, fileSrc)
 	if err != nil {
-		fmt.Println("cock")
+		fmt.Println("[APP] Copy file to assets FAIL: ", err.Error())
 		return
 	}
 	assetsFile.Sync()
 
 	url = cacher.BakerHost + "assets/" + fileName
-	fmt.Println(url)
+	fmt.Println("[APP] Returning local URL:", url)
 	return
 }

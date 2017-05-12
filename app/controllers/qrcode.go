@@ -9,6 +9,7 @@ import (
 
 	"gitlab.ulaiber.com/uboss/baker/app"
 	"gitlab.ulaiber.com/uboss/baker/services/cacher"
+	"gitlab.ulaiber.com/uboss/baker/services/painter"
 )
 
 func GetQrCode(ctx *gin.Context) {
@@ -23,7 +24,7 @@ func GetQrCode(ctx *gin.Context) {
 	fileUrl, _ := cacher.GetCache(cacheKey)
 
 	if fileUrl == "" {
-		qrImage, err := app.GenQrcodeImg(content, 390)
+		qrImage, err := painter.GenQrcodeImg(content, 390)
 		if err != nil {
 			fmt.Println("GenQrcodeImg FAIL:", err.Error())
 			ctx.JSON(http.StatusInternalServerError, gin.H{"message": "服务器发生错误"})
@@ -64,7 +65,7 @@ func GetMerchantQrcode(ctx *gin.Context) {
 	fileUrl, _ := cacher.GetCache(cacheKey)
 
 	if fileUrl == "" {
-		qrImage, err := app.GenQrcodeImg(content, 390)
+		qrImage, err := painter.GenQrcodeImg(content, 390)
 		if err != nil {
 			fmt.Println("GenQrcodeImg FAIL:", err.Error())
 			ctx.JSON(http.StatusInternalServerError, gin.H{"message": "服务器发生错误"})
@@ -73,7 +74,7 @@ func GetMerchantQrcode(ctx *gin.Context) {
 		defer qrImage.Close()
 		defer os.Remove(qrImage.Name())
 
-		backFile, err := app.GetRemoteFile(backFileUrl)
+		backFile, err := painter.GetRemoteFile(backFileUrl)
 		if err != nil {
 			fmt.Println("GetRemoteFile FAIL:", err.Error())
 			ctx.JSON(http.StatusInternalServerError, gin.H{"message": "服务器发生错误"})
@@ -81,7 +82,7 @@ func GetMerchantQrcode(ctx *gin.Context) {
 		}
 		defer backFile.Close()
 
-		imageFile, err := app.MergeImage(backFile, qrImage)
+		imageFile, err := painter.MergeImage(backFile, qrImage)
 		if err != nil {
 			fmt.Println("MergeImage FAIL:", err.Error())
 			ctx.JSON(http.StatusInternalServerError, gin.H{"message": "服务器发生错误"})

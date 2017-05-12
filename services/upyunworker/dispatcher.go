@@ -31,7 +31,7 @@ func (d *Dispatcher) dispatch() {
 		case job := <-JobQueue:
 			// a job request has been received
 			go func(job Job) {
-				fmt.Println("Dispatcher get JOB")
+				fmt.Println("[UPYUN] Dispatcher get JOB")
 				// try to obtain a worker job channel that is available.
 				// this will block until a worker is idle
 				jobChannel := <-d.WorkerPool

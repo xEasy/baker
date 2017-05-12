@@ -27,9 +27,9 @@ func UploadToUpyun(file *os.File) (formResp *upyun.FormUploadResp, err error) {
 		ExpireAfterSec: 30,
 	})
 	if err != nil {
-		fmt.Println("upFAIL error:", err.Error())
+		fmt.Println("[UPYUN] upFAIL error:", err.Error())
 	} else {
-		fmt.Println(formResp.Url)
+		fmt.Println("[UPYUN] upload success, PATH:", formResp.Url)
 		formResp.Url = UpyunHost + formResp.Url
 	}
 	return
