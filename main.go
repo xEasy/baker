@@ -20,6 +20,9 @@ func main() {
 	router.GET("/qrcode", getQrCode)
 
 	endless.ListenAndServe(":8080", router)
+
+	fmt.Println("SERVER ON 8080 stoped")
+	os.Exit(0)
 }
 
 func getQrCode(ctx *gin.Context) {
