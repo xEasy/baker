@@ -94,7 +94,7 @@ func MergeImage(file1 *os.File, file2 *os.File) (url string, err error) {
 	}
 	defer tmpfile.Close()
 
-	formResp, err := uploadToUpyun(tmpfile)
+	formResp, err := UploadToUpyun(tmpfile)
 	if err == nil {
 		url = formResp.Url
 	}

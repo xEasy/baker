@@ -8,6 +8,7 @@ import (
 )
 
 var upClient *upyun.UpYun
+var UpyunHost string
 
 func init() {
 	upClient = upyun.NewUpYun(&upyun.UpYunConfig{
@@ -15,9 +16,10 @@ func init() {
 		Operator: "uboss",
 		Password: "",
 	})
+	UpyunHost = "http://ssobu.b0.upaiyun.com/"
 }
 
-func uploadToUpyun(file *os.File) (formResp *upyun.FormUploadResp, err error) {
+func UploadToUpyun(file *os.File) (formResp *upyun.FormUploadResp, err error) {
 	defer os.Remove(file.Name())
 	formResp, err = upClient.FormUpload(&upyun.FormUploadConfig{
 		LocalPath:      file.Name(),
@@ -28,6 +30,7 @@ func uploadToUpyun(file *os.File) (formResp *upyun.FormUploadResp, err error) {
 		fmt.Println("upFAIL error:", err.Error())
 	} else {
 		fmt.Println(formResp.Url)
+		formResp.Url = UpyunHost + formResp.Url
 	}
 	return
 }
