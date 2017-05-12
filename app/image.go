@@ -54,19 +54,19 @@ func GetImageObj(file *os.File) (img image.Image, err error) {
 	return img, nil
 }
 
-func MergeImage(file1 *os.File, file2 *os.File) (url string, err error) {
+func MergeImage(file1 *os.File, file2 *os.File) (imageFile *os.File, err error) {
 
 	src, err := GetImageObj(file1)
 	if err != nil {
 		fmt.Println("bgFail:", err)
-		return "", err
+		return
 	}
 	srcB := src.Bounds().Max
 
 	src1, err := GetImageObj(file2)
 	if err != nil {
 		fmt.Println("QRcodeFAIL", err)
-		return "", err
+		return
 	}
 	src1B := src.Bounds().Max
 
@@ -86,18 +86,14 @@ func MergeImage(file1 *os.File, file2 *os.File) (url string, err error) {
 
 	newImage := resize.Resize(1024, 0, des, resize.Lanczos3)
 
-	tmpfile, err := ioutil.TempFile("", "upay")
-	err = jpeg.Encode(tmpfile, newImage, &opt)
+	imageFile, err = ioutil.TempFile("", "upay")
+	err = jpeg.Encode(imageFile, newImage, &opt)
 	if err != nil {
 		fmt.Println(err)
-		return "", err
+		return
 	}
-	defer tmpfile.Close()
+	defer imageFile.Close()
 
-	formResp, err := UploadToUpyun(tmpfile)
-	if err == nil {
-		url = formResp.Url
-	}
 	return
 }
 

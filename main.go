@@ -24,6 +24,7 @@ func main() {
 	router := gin.Default()
 	router.GET("/merchant_qrcode", getMerchantQrcode)
 	router.GET("/qrcode", getQrCode)
+	router.Static("/assets", "./public/assets")
 
 	endless.ListenAndServe(":8080", router)
 
@@ -50,14 +51,12 @@ func getQrCode(ctx *gin.Context) {
 			return
 		}
 
-		formResp, err := app.UploadToUpyun(qrImage)
+		fileUrl, err = app.SaveAssetsCacheFile(cacheKey, qrImage)
 		if err != nil {
-			fmt.Println("UploadToUpyun FAIL:", err.Error())
+			fmt.Println("SaveAssetsCacheFile FAIL:", err.Error())
 			ctx.JSON(http.StatusInternalServerError, gin.H{"message": "服务器发生错误"})
 			return
 		}
-		fileUrl = formResp.Url
-		app.SetCache(cacheKey, fileUrl)
 	}
 
 	switch mode {
@@ -103,13 +102,19 @@ func getMerchantQrcode(ctx *gin.Context) {
 		}
 		defer backFile.Close()
 
-		fileUrl, err = app.MergeImage(backFile, qrImage)
+		imageFile, err := app.MergeImage(backFile, qrImage)
 		if err != nil {
 			fmt.Println("MergeImage FAIL:", err.Error())
 			ctx.JSON(http.StatusInternalServerError, gin.H{"message": "服务器发生错误"})
 			return
 		}
-		app.SetCache(cacheKey, fileUrl)
+
+		fileUrl, err = app.SaveAssetsCacheFile(cacheKey, imageFile)
+		if err != nil {
+			fmt.Println("SaveAssetsCacheFile FAIL:", err.Error())
+			ctx.JSON(http.StatusInternalServerError, gin.H{"message": "服务器发生错误"})
+			return
+		}
 	}
 
 	switch mode {
