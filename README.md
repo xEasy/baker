@@ -26,6 +26,10 @@ Response:
 
 GET `merchant_qrcode?content={二维码内容}&bgUrl={背景图地址}`
 
+bgUrl为空时，默认使用下图作为背景
+
+<img src="http://ssobu.b0.upaiyun.com/platform/qr_code_bk_image/fe929bbce4397618523da8660f557c59.png-w320"></img>
+
 Response:
 
 ```json
@@ -36,4 +40,4 @@ Response:
 
 *bgUrl图片规格需严格遵从下图规范*
 
-![](http://admin.upayapp.cn/assets/store-a32b519f9dafcc668e9ccfd5cf84590c06395555c86d61506dc61c934921727f.jpg)
+<img src="http://admin.upayapp.cn/assets/store-a32b519f9dafcc668e9ccfd5cf84590c06395555c86d61506dc61c934921727f.jpg" width='320'> </img>
