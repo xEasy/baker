@@ -82,7 +82,7 @@ func getMerchantQrcode(ctx *gin.Context) {
 		backFileUrl = "http://ssobu.b0.upaiyun.com/platform/qr_code_bk_image/fe929bbce4397618523da8660f557c59.png"
 	}
 
-	cacheKey := app.GenMD5CacheKey(content)
+	cacheKey := app.GenMD5CacheKey(content + backFileUrl)
 	fileUrl, _ := app.GetCache(cacheKey)
 
 	if fileUrl == "" {
