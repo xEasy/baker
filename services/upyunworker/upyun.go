@@ -11,10 +11,14 @@ var upClient *upyun.UpYun
 var UpyunHost string
 
 func init() {
+	operator := os.Getenv("UPYUN_LOGIN")
+	if operator == "" {
+		operator = "uboss"
+	}
 	upClient = upyun.NewUpYun(&upyun.UpYunConfig{
 		Bucket:   "ssobu",
-		Operator: "uboss",
-		Password: "",
+		Operator: operator,
+		Password: os.Getenv("UPYUN_PW"),
 	})
 	UpyunHost = "http://ssobu.b0.upaiyun.com/"
 }
