@@ -16,7 +16,7 @@ import (
 func main() {
 	app.InitLog()
 
-	go startUpyunWorker()
+	startUpyunWorker()
 	startGinServer()
 }
 
