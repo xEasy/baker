@@ -2,15 +2,28 @@ INSTALL:
 
 `go get -u gitlab.ulaiber.com/uboss/baker`
 
+RUN:
+
+```shell
+go build
+WEB_ENV=production UPYUN_PW=upyun_password ./baker
+```
+
 USAGE:
 
-HOST: `image_baker.upayapp.cn`
+`HOST: image_baker.upayapp.cn`
+
+Features:
+
+- cache response
+- cache remote backgroud image
+- async upload to UPYUN
 
 #### 通用参数
 
 `mode`
 
-- 传入`mode=file`时直接返回图片文件
+- 传入`mode=file`时直接返回图片文件，`302`跳转至图片地址
 
 #### 二维码（无背景）
 
@@ -30,7 +43,7 @@ GET `merchant_qrcode?content={二维码内容}&bgUrl={背景图地址}`
 
 bgUrl为空时，默认使用下图作为背景
 
-<img src="http://ssobu.b0.upaiyun.com/platform/qr_code_bk_image/fe929bbce4397618523da8660f557c59.png-w320"></img>
+<img src="http://ssobu.b0.upaiyun.com/platform/qr_code_bk_image/fe929bbce4397618523da8660f557c59.png-w320" width='240'></img>
 
 Response:
 
@@ -42,4 +55,4 @@ Response:
 
 *bgUrl图片规格需严格遵从下图规范*
 
-<img src="http://admin.upayapp.cn/assets/store-a32b519f9dafcc668e9ccfd5cf84590c06395555c86d61506dc61c934921727f.jpg" width='320'> </img>
+<img src="http://admin.upayapp.cn/assets/store-a32b519f9dafcc668e9ccfd5cf84590c06395555c86d61506dc61c934921727f.jpg" width='240'> </img>
