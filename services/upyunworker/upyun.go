@@ -3,6 +3,7 @@ package upyunworker
 import (
 	"fmt"
 	"os"
+	"strings"
 
 	"github.com/upyun/go-sdk/upyun"
 )
@@ -24,10 +25,11 @@ func init() {
 }
 
 func (playload *Payload) UploadToUpyun() (formResp *upyun.FormUploadResp, err error) {
-	defer os.Remove(playload.File.Name())
+	values := strings.Split(playload.FilePath, "/")
+
 	formResp, err = upClient.FormUpload(&upyun.FormUploadConfig{
-		LocalPath:      playload.File.Name(),
-		SaveKey:        "ubakers/{filemd5}.jpg",
+		LocalPath:      playload.FilePath,
+		SaveKey:        "ubakers/" + values[len(values)-1],
 		ExpireAfterSec: 30,
 	})
 	if err != nil {

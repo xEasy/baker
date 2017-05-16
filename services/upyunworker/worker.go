@@ -13,7 +13,7 @@ var (
 )
 
 type Payload struct {
-	File     *os.File
+	FilePath string
 	CacheKey string
 }
 
