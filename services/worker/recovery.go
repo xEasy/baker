@@ -1,4 +1,4 @@
-package upyunworker
+package worker
 
 import (
 	"bytes"

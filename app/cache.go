@@ -5,7 +5,7 @@ import (
 	"os"
 
 	"gitlab.ulaiber.com/uboss/baker/services/cacher"
-	"gitlab.ulaiber.com/uboss/baker/services/upyunworker"
+	"gitlab.ulaiber.com/uboss/baker/services/worker"
 )
 
 type FileExt string
@@ -23,8 +23,8 @@ func SaveAssetsCacheFile(cacheKey string, file *os.File, ext FileExt) (url strin
 	}
 
 	go func() {
-		work := upyunworker.Job{upyunworker.Payload{FilePath: filePath, CacheKey: cacheKey}}
-		upyunworker.JobQueue <- work
+		work := worker.Job{worker.Payload{FilePath: filePath, CacheKey: cacheKey}}
+		worker.JobQueue <- work
 	}()
 
 	url = cacher.BakerHost + "assets/" + fileName

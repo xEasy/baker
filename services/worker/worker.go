@@ -1,10 +1,8 @@
-package upyunworker
+package worker
 
 import (
 	"fmt"
 	"os"
-
-	"gitlab.ulaiber.com/uboss/baker/services/cacher"
 )
 
 var (
@@ -13,8 +11,10 @@ var (
 )
 
 type Payload struct {
-	FilePath string
-	CacheKey string
+	FilePath      string
+	PackContents  []string
+	BackgroudFile string
+	CacheKey      string
 }
 
 // Job represents the job to be run
@@ -54,11 +54,10 @@ func (w Worker) Start() {
 					fmt.Println("[UPYUN] GET job:", job.Payload)
 					// we have received a work request.
 					// do something with it
-					formResp, err := job.Payload.UploadToUpyun()
-					if err != nil {
-						fmt.Println("[UPYUN] upyunworker UploadToUpyun FAIL:", err)
+					if job.Payload.FilePath == "" {
+						job.Payload.UploadPackToUpyun()
 					} else {
-						cacher.SetCache(job.Payload.CacheKey, formResp.Url)
+						job.Payload.UploadToUpyun()
 					}
 				}()
 			case <-w.quit:

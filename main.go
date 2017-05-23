@@ -10,19 +10,19 @@ import (
 
 	"gitlab.ulaiber.com/uboss/baker/app"
 	"gitlab.ulaiber.com/uboss/baker/app/controllers"
-	"gitlab.ulaiber.com/uboss/baker/services/upyunworker"
+	"gitlab.ulaiber.com/uboss/baker/services/worker"
 )
 
 func main() {
 	app.InitLog()
 
-	startUpyunWorker()
+	startWorker()
 	startGinServer()
 }
 
-func startUpyunWorker() {
-	dispatcher := upyunworker.NewDispatcher(100)
-	upyunworker.JobQueue = make(chan upyunworker.Job)
+func startWorker() {
+	dispatcher := worker.NewDispatcher(100)
+	worker.JobQueue = make(chan worker.Job)
 	dispatcher.Run()
 }
 
