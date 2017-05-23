@@ -8,16 +8,22 @@ import (
 	"gitlab.ulaiber.com/uboss/baker/services/upyunworker"
 )
 
-func SaveAssetsCacheFile(cacheKey string, file *os.File) (url string, err error) {
+type FileExt string
 
-	fileName := "public/assets/" + cacheKey + ".jpg"
-	err = os.Rename(file.Name(), fileName)
+var FileExtJPG FileExt = ".jpg"
+var FileExtZip FileExt = ".zip"
+
+func SaveAssetsCacheFile(cacheKey string, file *os.File, ext FileExt) (url string, err error) {
+
+	fileName := fmt.Sprintf("%s%s", cacheKey, ext)
+	filePath := "public/assets/" + fileName
+	err = os.Rename(file.Name(), filePath)
 	if err != nil {
 		return
 	}
 
 	go func() {
-		work := upyunworker.Job{upyunworker.Payload{FilePath: fileName, CacheKey: cacheKey}}
+		work := upyunworker.Job{upyunworker.Payload{FilePath: filePath, CacheKey: cacheKey}}
 		upyunworker.JobQueue <- work
 	}()
 
