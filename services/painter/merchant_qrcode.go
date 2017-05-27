@@ -6,7 +6,7 @@ import (
 )
 
 func GenMerchantQrcode(content, backFileUrl string) (file *os.File, err error) {
-	qrImage, err := GenQrcodeImg(content, 390)
+	qrImage, err := GenQrcodeImg(content, 320)
 	if err != nil {
 		fmt.Println("GenQrcodeImg FAIL:", err.Error())
 		return nil, err

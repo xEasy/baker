@@ -14,7 +14,7 @@ import (
 func (payload *Payload) UploadPackToUpyun() (err error) {
 
 	cacher.SetCache(payload.CacheKey, "runing")
-	zipFile, err := ioutil.TempFile("", "ubaker")
+	zipFile, err := ioutil.TempFile("tmp", "ubaker")
 	defer os.Remove(zipFile.Name())
 
 	if err != nil {

@@ -69,6 +69,7 @@ func GetMerchantQrcode(ctx *gin.Context) {
 		if err != nil {
 			fmt.Println("SaveAssetsCacheFile FAIL:", err.Error())
 			ctx.JSON(http.StatusInternalServerError, gin.H{"message": "服务器发生错误"})
+			return
 		}
 	}
 

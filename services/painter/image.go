@@ -78,15 +78,15 @@ func MergeImage(file1 *os.File, file2 *os.File) (imageFile *os.File, err error) 
 
 	des := image.NewRGBA(image.Rect(0, 0, newWidth, newHeight)) // 底板
 
-	draw.Draw(des, des.Bounds(), src, src.Bounds().Min, draw.Over)                      //首先将一个图片信息存入jpg
-	draw.Draw(des, image.Rect(190, 320, 510, 640), src1, image.Point{35, 35}, draw.Src) //将另外一张图片信息存入jpg
+	draw.Draw(des, des.Bounds(), src, src.Bounds().Min, draw.Over)                    //首先将一个图片信息存入jpg
+	draw.Draw(des, image.Rect(190, 320, 510, 640), src1, src1.Bounds().Min, draw.Src) //将另外一张图片信息存入jpg
 
 	var opt jpeg.Options
 	opt.Quality = 80
 
 	newImage := resize.Resize(1024, 0, des, resize.Lanczos3)
 
-	imageFile, err = ioutil.TempFile("", "upay")
+	imageFile, err = ioutil.TempFile("tmp", "upay")
 	err = jpeg.Encode(imageFile, newImage, &opt)
 	if err != nil {
 		fmt.Println("[PAINTER] JPEG Encode fail: ", err)
