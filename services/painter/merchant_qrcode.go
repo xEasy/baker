@@ -5,8 +5,8 @@ import (
 	"os"
 )
 
-func GenMerchantQrcode(content, backFileUrl string) (file *os.File, err error) {
-	qrImage, err := GenQrcodeImg(content, 320)
+func GenMerchantQrcode(content, backFileUrl string, config *MergeImageConfig) (file *os.File, err error) {
+	qrImage, err := GenQrcodeImg(content, config.QrWidth)
 	if err != nil {
 		fmt.Println("GenQrcodeImg FAIL:", err.Error())
 		return nil, err
@@ -21,7 +21,7 @@ func GenMerchantQrcode(content, backFileUrl string) (file *os.File, err error) {
 	}
 	defer backFile.Close()
 
-	file, err = MergeImage(backFile, qrImage)
+	file, err = MergeImage(backFile, qrImage, config)
 	if err != nil {
 		fmt.Println("MergeImage FAIL:", err.Error())
 		return nil, err

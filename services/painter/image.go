@@ -17,6 +17,30 @@ import (
 	"github.com/nfnt/resize"
 )
 
+type MergeImageConfig struct {
+	Top     int
+	Left    int
+	QrWidth int
+}
+
+var DefaultMergeImageConfig *MergeImageConfig
+
+func init() {
+	DefaultMergeImageConfig = &MergeImageConfig{
+		Top:     320,
+		Left:    190,
+		QrWidth: 320,
+	}
+}
+
+func (config *MergeImageConfig) RightPoint() int {
+	return config.Left + config.QrWidth
+}
+
+func (config *MergeImageConfig) BottomPoint() int {
+	return config.Top + config.QrWidth
+}
+
 func GetImageObj(file *os.File) (img image.Image, err error) {
 	file.Seek(0, 0)
 
@@ -54,7 +78,7 @@ func GetImageObj(file *os.File) (img image.Image, err error) {
 	return img, nil
 }
 
-func MergeImage(file1 *os.File, file2 *os.File) (imageFile *os.File, err error) {
+func MergeImage(file1 *os.File, file2 *os.File, config *MergeImageConfig) (imageFile *os.File, err error) {
 
 	src, err := GetImageObj(file1)
 	if err != nil {
@@ -78,8 +102,8 @@ func MergeImage(file1 *os.File, file2 *os.File) (imageFile *os.File, err error) 
 
 	des := image.NewRGBA(image.Rect(0, 0, newWidth, newHeight)) // 底板
 
-	draw.Draw(des, des.Bounds(), src, src.Bounds().Min, draw.Over)                    //首先将一个图片信息存入jpg
-	draw.Draw(des, image.Rect(190, 320, 510, 640), src1, src1.Bounds().Min, draw.Src) //将另外一张图片信息存入jpg
+	draw.Draw(des, des.Bounds(), src, src.Bounds().Min, draw.Over)                                                                    //首先将一个图片信息存入jpg
+	draw.Draw(des, image.Rect(config.Left, config.Top, config.RightPoint(), config.BottomPoint()), src1, src1.Bounds().Min, draw.Src) //将另外一张图片信息存入jpg
 
 	var opt jpeg.Options
 	opt.Quality = 80

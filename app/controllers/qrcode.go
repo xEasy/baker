@@ -3,6 +3,8 @@ package controllers
 import (
 	"fmt"
 	"net/http"
+	"strconv"
+	"strings"
 
 	"github.com/gin-gonic/gin"
 	"gitlab.ulaiber.com/uboss/baker/app"
@@ -57,10 +59,12 @@ func GetMerchantQrcode(ctx *gin.Context) {
 		backFileUrl = "http://ssobu.b0.upaiyun.com/platform/qr_code_bk_image/fe929bbce4397618523da8660f557c59.png"
 	}
 
-	cacheKey := cacher.GenMD5CacheKey(content + backFileUrl)
+	merchantQrcodeConfig, topStr, leftStr, qrwidthStr := getMerchantMergeConfig(ctx)
+
+	cacheKey := cacher.GenMD5CacheKey(strings.Join([]string{content, backFileUrl, topStr, leftStr, qrwidthStr}, "|"))
 	fileUrl, _ := cacher.GetCache(cacheKey)
 	if fileUrl == "" {
-		file, err := painter.GenMerchantQrcode(content, backFileUrl)
+		file, err := painter.GenMerchantQrcode(content, backFileUrl, merchantQrcodeConfig)
 		if err != nil {
 			ctx.JSON(http.StatusInternalServerError, gin.H{"message": "服务器发生错误"})
 			return
@@ -79,4 +83,22 @@ func GetMerchantQrcode(ctx *gin.Context) {
 	default:
 		ctx.JSON(http.StatusOK, gin.H{"url": fileUrl})
 	}
+}
+
+func getMerchantMergeConfig(ctx *gin.Context) (config *painter.MergeImageConfig, topStr string, leftStr string, qrwidthStr string) {
+	config = &painter.MergeImageConfig{}
+
+	topStr = ctx.DefaultQuery("top", strconv.FormatInt(int64(painter.DefaultMergeImageConfig.Top), 10))
+	top, _ := strconv.ParseInt(topStr, 10, 64)
+	config.Top = int(top)
+
+	leftStr = ctx.DefaultQuery("left", strconv.FormatInt(int64(painter.DefaultMergeImageConfig.Left), 10))
+	left, _ := strconv.ParseInt(leftStr, 10, 64)
+	config.Left = int(left)
+
+	qrwidthStr = ctx.DefaultQuery("qrwidth", strconv.FormatInt(int64(painter.DefaultMergeImageConfig.QrWidth), 10))
+	qrwidth, _ := strconv.ParseInt(qrwidthStr, 10, 64)
+	config.QrWidth = int(qrwidth)
+
+	return
 }

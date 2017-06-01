@@ -15,6 +15,9 @@ type Payload struct {
 	PackContents  []string
 	BackgroudFile string
 	CacheKey      string
+	PackTop       int
+	PackLeft      int
+	PackQrWidth   int
 }
 
 // Job represents the job to be run

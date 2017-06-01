@@ -15,15 +15,20 @@ func (payload *Payload) UploadPackToUpyun() (err error) {
 
 	cacher.SetCache(payload.CacheKey, "runing")
 	zipFile, err := ioutil.TempFile("tmp", "ubaker")
-	defer os.Remove(zipFile.Name())
+	//defer os.Remove(zipFile.Name())
 
 	if err != nil {
 		cacher.SetCache(payload.CacheKey, "生成zip临时文件出错:"+err.Error())
 		return
 	}
 	zipWriter := zip.NewWriter(zipFile)
+	merchantQrcodeConfing := &painter.MergeImageConfig{
+		Top:     payload.PackTop,
+		Left:    payload.PackLeft,
+		QrWidth: payload.PackQrWidth,
+	}
 	for _, c := range payload.PackContents {
-		img, err := painter.GenMerchantQrcode(c, payload.BackgroudFile)
+		img, err := painter.GenMerchantQrcode(c, payload.BackgroudFile, merchantQrcodeConfing)
 		if err != nil {
 			continue
 		}

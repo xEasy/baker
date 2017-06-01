@@ -15,6 +15,9 @@ import (
 type QrcodePack struct {
 	Contents   []string
 	Background string
+	Top        int
+	Left       int
+	QrWidth    int
 }
 
 /*
@@ -52,6 +55,9 @@ func GetQrcodePack(ctx *gin.Context) {
 		PackContents:  pack.Contents,
 		BackgroudFile: pack.Background,
 		CacheKey:      cacheKey,
+		PackTop:       pack.Top,
+		PackLeft:      pack.Left,
+		PackQrWidth:   pack.QrWidth,
 	}}
 	worker.JobQueue <- work
 
