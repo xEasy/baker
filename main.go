@@ -3,7 +3,7 @@ package main
 import (
 	"fmt"
 	"os"
-	"runtime"
+	//"runtime"
 
 	"github.com/fvbock/endless"
 	"github.com/gin-gonic/gin"
@@ -32,7 +32,7 @@ func startGinServer() {
 	}
 	gin.DefaultWriter = os.Stdout
 
-	runtime.GOMAXPROCS(runtime.NumCPU() * 2)
+	//runtime.GOMAXPROCS(runtime.NumCPU() * 2)
 
 	router := gin.Default()
 	router.GET("/merchant_qrcode", controllers.GetMerchantQrcode)
