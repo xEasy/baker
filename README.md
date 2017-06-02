@@ -21,13 +21,17 @@ Features:
 
 #### 通用参数
 
-`mode`
+- `mode`
 
-- 传入`mode=file`时直接返回图片文件，`302`跳转至图片地址
+  - 传入`mode=file`时直接返回图片文件，`302`跳转至图片地址
 
 #### 二维码（无背景）
 
 GET `qrcode?content={二维码内容}`
+
+Params:
+
+- `content` 二维码内容
 
 Response:
 
@@ -40,6 +44,14 @@ Response:
 #### 商户收款二维码（带背景）
 
 GET `merchant_qrcode?content={二维码内容}&bgUrl={背景图地址}`
+
+Params:
+
+- `content` 二维码内容
+- `bgUrl` 底图地址（完整的HTTP链接）
+- `top`  商户二维码距离底图顶部位置
+- `left` 商户二维码距离底图左部位置
+- `qrwidth` 二维码大小
 
 bgUrl为空时，默认使用下图作为背景
 
@@ -64,7 +76,10 @@ POST `qrcode_pack`
 ```json
 {
 	"contents":[ "内容1","内容2"],
-	"background": "背景图"
+	"background": "背景图",
+  "top": 100,
+  "left": 100,
+  "qrwidth": 320
 }
 ```
 
