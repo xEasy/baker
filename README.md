@@ -11,7 +11,7 @@ WEB_ENV=production UPYUN_PW=upyun_password ./baker
 
 USAGE:
 
-`HOST: image_baker.upayapp.cn`
+`HOST: baker.upayapp.cn`
 
 Features:
 
