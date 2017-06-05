@@ -19,7 +19,7 @@ func GenQrcodeImg(content string, size int) (imageFile *os.File, err error) {
 		return
 	}
 
-	realsize := float64(size) * 1.3
+	realsize := float64(size) * 1.25
 	img := code.Image(int(realsize))
 	croppedImg, _ := cutter.Crop(img, cutter.Config{
 		Width:  size,
