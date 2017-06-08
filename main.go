@@ -41,6 +41,7 @@ func startGinServer() {
 	router.GET("/qrcode_pack_status", controllers.GetQrcodePackStatus)
 	router.Static("/assets", "./public/assets")
 
+	fmt.Println("Start SERVER ON 8080")
 	endless.ListenAndServe(":8080", router)
 
 	fmt.Println("SERVER ON 8080 stoped")
