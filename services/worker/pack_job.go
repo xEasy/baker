@@ -6,6 +6,7 @@ import (
 	"io"
 	"io/ioutil"
 	"os"
+	"strconv"
 
 	"gitlab.ulaiber.com/uboss/baker/services/cacher"
 	"gitlab.ulaiber.com/uboss/baker/services/painter"
@@ -27,7 +28,7 @@ func (payload *Payload) UploadPackToUpyun() (err error) {
 		Left:    payload.PackLeft,
 		QrWidth: payload.PackQrWidth,
 	}
-	for _, c := range payload.PackContents {
+	for index, c := range payload.PackContents {
 		img, err := painter.GenMerchantQrcode(c, payload.BackgroudFile, merchantQrcodeConfing)
 		if err != nil {
 			continue
@@ -36,8 +37,9 @@ func (payload *Payload) UploadPackToUpyun() (err error) {
 		if err != nil {
 			continue
 		}
-		zipFile, err := zipWriter.Create(cacher.GenMD5CacheKey(c) + ".jpg")
+		zipFile, err := zipWriter.Create("qrcode_" + strconv.FormatInt(int64(index), 10) + ".jpg")
 		io.Copy(zipFile, img)
+		defer os.Remove(img.Name())
 	}
 	err = zipWriter.Close()
 	if err != nil {
