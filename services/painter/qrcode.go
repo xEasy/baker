@@ -13,7 +13,7 @@ func GenQrcodeImg(content string, size int) (imageFile *os.File, err error) {
 	var opt jpeg.Options
 	opt.Quality = 80
 
-	code, _ := qrcode.New(content, qrcode.Highest)
+	code, _ := qrcode.New(content, qrcode.Medium)
 	imageFile, err = ioutil.TempFile("tmp", "ubaker")
 	if err != nil {
 		return
