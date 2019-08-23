@@ -1,19 +1,27 @@
+Baker:  A qrcode services;
+
+Features:
+
+  - Generate qrcode image
+  - Generate qrcode image with backgroud image
+  - Batch generate qrcode image
+
 INSTALL:
 
-`go get -u gitlab.ulaiber.com/uboss/baker`
+`go get -u github.com/xEasy/baker`
 
 RUN:
 
 ```shell
 go build
-WEB_ENV=production UPYUN_PW=upyun_password ./baker
+WEB_ENV=production UPYUN_PW=upyun_password UPYUN_BUCKET=bucket UPYUN_OPERATOR=operator HOST=production_host ./baker
 ```
 
 USAGE:
 
-`HOST: baker.upayapp.cn`
+`HOST: qrcode.baker.cn`
 
-Features:
+Functions:
 
 - cache response
 - cache remote backgroud image
@@ -41,7 +49,7 @@ Response:
 }
 ```
 
-#### 商户收款二维码（带背景）
+#### 带背景二维码
 
 GET `merchant_qrcode?content={二维码内容}&bgUrl={背景图地址}`
 
@@ -79,7 +87,8 @@ POST `qrcode_pack`
 	"background": "背景图",
   "top": 100,
   "left": 100,
-  "qrwidth": 320
+  "qrwidth": 320,
+  "noback": false  // 普通二维码，不生产带背景的二维码
 }
 ```
 

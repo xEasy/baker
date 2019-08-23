@@ -8,8 +8,8 @@ import (
 	"os"
 	"strconv"
 
-	"gitlab.ulaiber.com/uboss/baker/services/cacher"
-	"gitlab.ulaiber.com/uboss/baker/services/painter"
+	"github.com/xEasy/baker/services/cacher"
+	"github.com/xEasy/baker/services/painter"
 )
 
 func (payload *Payload) UploadPackToUpyun() (err error) {
@@ -29,7 +29,13 @@ func (payload *Payload) UploadPackToUpyun() (err error) {
 		QrWidth: payload.PackQrWidth,
 	}
 	for index, c := range payload.PackContents {
-		img, err := painter.GenMerchantQrcode(c, payload.BackgroudFile, merchantQrcodeConfing)
+		var img *os.File
+		var err error
+		if payload.NoBack {
+			img, err = painter.GenQrcodeImg(c, payload.PackQrWidth)
+		} else {
+			img, err = painter.GenMerchantQrcode(c, payload.BackgroudFile, merchantQrcodeConfing)
+		}
 		if err != nil {
 			continue
 		}

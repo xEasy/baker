@@ -8,8 +8,8 @@ import (
 	"strings"
 
 	"github.com/gin-gonic/gin"
-	"gitlab.ulaiber.com/uboss/baker/services/cacher"
-	"gitlab.ulaiber.com/uboss/baker/services/worker"
+	"github.com/xEasy/baker/services/cacher"
+	"github.com/xEasy/baker/services/worker"
 )
 
 type QrcodePack struct {
@@ -18,13 +18,18 @@ type QrcodePack struct {
 	Top        int
 	Left       int
 	QrWidth    int
+	NoBack     bool
 }
 
 /*
 post json：
 {
 	"contents":[ "内容1","内容2"],
-	"background": "背景图"
+	"background": "背景图",
+	"top": n,
+	"left": n,
+	"qr_width": x,
+	"noback": true
 }
 */
 func GetQrcodePack(ctx *gin.Context) {
@@ -58,6 +63,7 @@ func GetQrcodePack(ctx *gin.Context) {
 		PackTop:       pack.Top,
 		PackLeft:      pack.Left,
 		PackQrWidth:   pack.QrWidth,
+		NoBack:        pack.NoBack,
 	}}
 	worker.JobQueue <- work
 

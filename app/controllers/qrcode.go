@@ -7,9 +7,9 @@ import (
 	"strings"
 
 	"github.com/gin-gonic/gin"
-	"gitlab.ulaiber.com/uboss/baker/app"
-	"gitlab.ulaiber.com/uboss/baker/services/cacher"
-	"gitlab.ulaiber.com/uboss/baker/services/painter"
+	"github.com/xEasy/baker/app"
+	"github.com/xEasy/baker/services/cacher"
+	"github.com/xEasy/baker/services/painter"
 )
 
 func GetQrCode(ctx *gin.Context) {

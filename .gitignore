@@ -3,3 +3,5 @@ web
 logs
 public
 .idea
+*.gz
+baker

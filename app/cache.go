@@ -4,8 +4,8 @@ import (
 	"fmt"
 	"os"
 
-	"gitlab.ulaiber.com/uboss/baker/services/cacher"
-	"gitlab.ulaiber.com/uboss/baker/services/worker"
+	"github.com/xEasy/baker/services/cacher"
+	"github.com/xEasy/baker/services/worker"
 )
 
 type FileExt string

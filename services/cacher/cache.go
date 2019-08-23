@@ -16,7 +16,8 @@ func init() {
 	memcacheClient = memcache.New("localhost:11211")
 	memcacheClient.MaxIdleConns = 100
 	if os.Getenv("WEB_ENV") == "production" {
-		BakerHost = "http://baker.upayapp.cn/"
+		// TODO conf
+		BakerHost = os.Getenv("HOST")
 	} else {
 		BakerHost = "http://localhost:8080/"
 	}

@@ -8,9 +8,9 @@ import (
 	"github.com/fvbock/endless"
 	"github.com/gin-gonic/gin"
 
-	"gitlab.ulaiber.com/uboss/baker/app"
-	"gitlab.ulaiber.com/uboss/baker/app/controllers"
-	"gitlab.ulaiber.com/uboss/baker/services/worker"
+	"github.com/xEasy/baker/app"
+	"github.com/xEasy/baker/app/controllers"
+	"github.com/xEasy/baker/services/worker"
 )
 
 func main() {

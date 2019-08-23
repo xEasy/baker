@@ -18,6 +18,7 @@ type Payload struct {
 	PackTop       int
 	PackLeft      int
 	PackQrWidth   int
+	NoBack        bool
 }
 
 // Job represents the job to be run

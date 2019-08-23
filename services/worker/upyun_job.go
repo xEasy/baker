@@ -16,14 +16,14 @@ var UpyunHost string
 func init() {
 	operator := os.Getenv("UPYUN_LOGIN")
 	if operator == "" {
-		operator = "uboss"
+		operator = os.Getenv("UPYUN_OPEATOR")
 	}
 	upClient = upyun.NewUpYun(&upyun.UpYunConfig{
-		Bucket:   "ssobu",
+		Bucket:   os.Getenv("UPYUN_BUCKET"),
 		Operator: operator,
 		Password: os.Getenv("UPYUN_PW"),
 	})
-	UpyunHost = "http://ssobu.b0.upaiyun.com/"
+	UpyunHost = fmt.Sprintf("http://%s.b0.upaiyun.com/", os.Getenv("UPYUN_BUCKET"))
 }
 
 func (payload *Payload) UploadToUpyun() (formResp *upyun.FormUploadResp, err error) {
